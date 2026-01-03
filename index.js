@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import Gamedig from "gamedig";
+import { query } from "gamedig";
 import mysql from "mysql2/promise";
 
 dotenv.config();
@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 // SA-MP Server Status
 app.get("/api/server/status", async (req, res) => {
   try {
-    const state = await Gamedig.query({
+    const state = await query({
       type: "samp",
       host: process.env.SAMP_IP,
       port: Number(process.env.SAMP_PORT)
