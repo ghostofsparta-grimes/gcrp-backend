@@ -51,7 +51,7 @@ app.get("/api/leaderboard", async (req, res) => {
       `SELECT username, level, hours
        FROM users
        ORDER BY level DESC, hours DESC
-       LIMIT 10`
+       LIMIT 25`
     );
 
     res.json(rows);
