@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { query } from "gamedig";
+import * as Gamedig from "gamedig";
 import mysql from "mysql2/promise";
 
 dotenv.config();
@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 // SA-MP Server Status
 app.get("/api/server/status", async (req, res) => {
   try {
-    const state = await query({
+    const state = await Gamedig.query({
       type: "samp",
       host: process.env.SAMP_IP,
       port: Number(process.env.SAMP_PORT)
@@ -56,6 +56,7 @@ app.get("/api/leaderboard", async (req, res) => {
 
     res.json(rows);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Database error" });
   }
 });
