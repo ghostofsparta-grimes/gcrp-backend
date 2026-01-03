@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import Gamedig from "gamedig";
+import mysql from "mysql2/promise";
 
 dotenv.config();
 
@@ -32,6 +33,30 @@ app.get("/api/server/status", async (req, res) => {
     });
   } catch (error) {
     res.json({ online: false });
+  }
+});
+
+// MySQL connection (READ ONLY)
+const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME
+});
+
+// Leaderboard API (Top Players)
+app.get("/api/leaderboard", async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT username, level, hours
+       FROM users
+       ORDER BY level DESC, hours DESC
+       LIMIT 10`
+    );
+
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: "Database error" });
   }
 });
 
